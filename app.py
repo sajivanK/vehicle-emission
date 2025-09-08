@@ -7,12 +7,12 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import numpy as np
 
 # =========================
-# Load trained model & pipeline
+# Load trained final model (pipeline + regression)
 # =========================
 model = joblib.load("final_model.pkl")
 
 # Load your dataset (for average comparisons)
-df = pd.read_csv("cleaned_vehicle_dataset.csv")  
+df = pd.read_csv("cleaned_vehicle_dataset.csv")
 
 # =========================
 # App Layout
@@ -42,9 +42,8 @@ if st.sidebar.button("Predict"):
         "Combined (L/100 km)": [combined_l_100km]
     })
 
-    # Preprocess & predict
-    input_processed = pipeline.transform(input_data)
-    prediction = model.predict(input_processed)[0]
+    # Predict directly (model already has preprocessing inside)
+    prediction = model.predict(input_data)[0]
 
     # =========================
     # Results Section
@@ -58,8 +57,7 @@ if st.sidebar.button("Predict"):
     # Model evaluation (on dataset, for display)
     X = df.drop(columns=["CO2 emissions (g/km)", "CO2 rating", "Smog rating"], errors="ignore")
     y = df["CO2 emissions (g/km)"]
-    X_processed = pipeline.transform(X)
-    y_pred = model.predict(X_processed)
+    y_pred = model.predict(X)
 
     r2 = r2_score(y, y_pred)
     rmse = np.sqrt(mean_squared_error(y, y_pred))
@@ -97,21 +95,7 @@ if st.sidebar.button("Predict"):
         ax.set_title("Residuals Distribution")
         st.pyplot(fig)
 
-    # 3. Feature Coefficient Impact
-    st.write("---")
-    st.write("### ⚡ Feature Impact on CO₂ Emissions")
-    encoded_features = pipeline.named_steps["preprocessor"].get_feature_names_out()
-    coef_df = pd.DataFrame({
-        "Feature": encoded_features,
-        "Coefficient (β)": model.coef_
-    }).sort_values(by="Coefficient (β)", ascending=False)
-
-    fig, ax = plt.subplots(figsize=(7,5))
-    sns.barplot(x="Coefficient (β)", y="Feature", data=coef_df, palette="coolwarm", ax=ax)
-    ax.set_title("Regression Coefficients")
-    st.pyplot(fig)
-
-    # 4. User vs Dataset Average Comparison
+    # 3. User vs Dataset Average Comparison
     st.write("---")
     st.write("### 🚘 Your Vehicle vs Dataset Average")
     comparison_df = pd.DataFrame({
