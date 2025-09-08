@@ -9,11 +9,10 @@ import numpy as np
 # =========================
 # Load trained model & pipeline
 # =========================
-model = joblib.load("linear_regression_model.pkl")
-pipeline = joblib.load("preprocessing_pipeline.pkl")
+model = joblib.load("final_model.pkl")
 
 # Load your dataset (for average comparisons)
-df = pd.read_csv("cleaned_vehicle_dataset.csv")  # <- replace with your cleaned dataset path
+df = pd.read_csv("cleaned_vehicle_dataset.csv")  
 
 # =========================
 # App Layout
