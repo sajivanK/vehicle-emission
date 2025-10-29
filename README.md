@@ -13,7 +13,7 @@ This project was developed as part of the **Fundamentals of Data Mining** module
   - Added synthetic rows with missing values, duplicates, and outliers for cleaning tasks.  
   - Handled missing values (median imputation for numeric, mode for categorical).  
   - Encoded categorical variables (fuel type).  
-  - Scaled numerical features for fair comparison.  
+  - Scaled numerical features for fair comparison..  
 
 - ✅ **Exploratory Data Analysis (EDA)**  
   - Distribution plots of CO₂ emissions.  
